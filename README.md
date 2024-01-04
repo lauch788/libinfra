@@ -6,6 +6,7 @@ More features will be implemented as the need arises within dependent code.
 
 Features
 --------
+- Generic object interface
 - Garbage-collected UTF-8 strings
 - Stack data structure
 
