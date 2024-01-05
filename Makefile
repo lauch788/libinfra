@@ -33,7 +33,7 @@ install: all
 	mkdir -p "$(DESTDIR)$(LIBPREFIX)"
 	mkdir -p "$(DESTDIR)$(INCPREFIX)/infra"
 	cp -f $(ANAME) "$(DESTDIR)$(LIBPREFIX)"
-	for h in $(INCLUDES); do cp -f infra/$h "$(DESTDIR)$(INCPREFIX)/infra/$h"; done
+	cp -r infra "$(DESTDIR)$(INCPREFIX)"
 
 uninstall:
 	rm -f "$(DESTDIR)$(LIBPREFIX)/$(ANAME)"
