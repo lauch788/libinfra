@@ -7,10 +7,6 @@ CFLAGS += -I.
 
 all: $(ANAME)
 
-INCLUDES =\
-	stack.h\
-	string.h\
-
 SRCS =\
 	src/object\
 	src/stack\
@@ -34,6 +30,7 @@ install: all
 	mkdir -p "$(DESTDIR)$(INCPREFIX)/infra"
 	cp -f $(ANAME) "$(DESTDIR)$(LIBPREFIX)"
 	cp -r infra "$(DESTDIR)$(INCPREFIX)"
+	if ! [ -z "$(PCPREFIX)" ]; then mkdir -p "$(DESTDIR)$(PCPREFIX)"; printf "Name: libinfra\nDescription: C99 Utility Library\nURL: https://github.com/rshadr/libinfra\nVersion: 0.1\nCflags: -I$(INCPREFIX)\nLibs: -L$(LIBPREFIX) -linfra -lgrapheme\n" > "$(DESTDIR)$(PCPREFIX)/libinfra.pc"; fi
 
 uninstall:
 	rm -f "$(DESTDIR)$(LIBPREFIX)/$(ANAME)"

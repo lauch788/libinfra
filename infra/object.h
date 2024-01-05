@@ -2,6 +2,7 @@
 #define _LIBINFRA_OBJECT_H
 
 #include <stdint.h>
+#include <stddef.h>
 
 typedef void InfraObject;
 typedef struct InfraObjectShared_s InfraObjectShared;

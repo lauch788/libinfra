@@ -41,4 +41,6 @@ infra_string_zero(InfraString *string)
 void infra_string_put_char(InfraString *string, char c);
 void infra_string_put_unicode(InfraString *string, uint32_t c);
 
+InfraString *infra_string_clone(const InfraString *string);
+
 #endif /* _LIBINFRA_STRING_H */

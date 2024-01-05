@@ -9,6 +9,7 @@ Features
 - Generic object interface
 - Garbage-collected UTF-8 strings
 - Stack data structure
+- Locale-independent ASCII functions
 
 Dependencies
 ------------

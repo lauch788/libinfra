@@ -72,3 +72,18 @@ infra_string_put_unicode(InfraString *string, uint32_t c)
   memcpy(&string->data[string->size], utf8, written);
   string->size += written;
 }
+
+InfraString *
+infra_string_clone(const InfraString *src)
+{
+  InfraString *clone;
+
+  clone = calloc(sizeof (*clone), 1);
+
+  clone->capacity = src->capacity;
+  clone->size = src->size;
+  clone->data = calloc(src->capacity, 1);
+  memcpy(&clone->data[0], &src->data[0], src->size);
+
+  return infra_string_ref(clone);
+}
