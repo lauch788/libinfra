@@ -8,6 +8,7 @@ CFLAGS += -I.
 all: $(ANAME)
 
 SRCS =\
+	src/queue\
 	src/object\
 	src/stack\
 	src/string\
@@ -16,6 +17,7 @@ $(ANAME): $(SRCS:=.o)
 	$(AR) -rc $@ $^
 	$(RANLIB) $@
 
+src/queue.o: src/queue.c infra/queue.h
 src/object.o: src/object.c infra/object.h
 src/stack.o: src/stack.c infra/stack.h
 src/string.o: src/string.c infra/string.h
