@@ -2,7 +2,7 @@
  * Copyright 2024 Adrien Ricciardi
  * See LICENSE for details
  */
-
+#include <assert.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -59,4 +59,15 @@ infra_stack_push(InfraStack *stack, void *item)
   stack->items[stack->size++] = item;
 
   return item;
+}
+
+void
+infra_stack_insert(InfraStack *stack, int idx, void *item)
+{
+  assert(idx >= 0 && idx < stack->size);
+
+  maybe_grow(stack, 1);
+  memmove(&stack->items[idx], &stack->items[idx + 1],
+   (stack->size - idx) * sizeof (stack->items[0]));
+  stack->items[idx] = item;
 }

@@ -2,15 +2,14 @@
  * Copyright 2024 Adrien Ricciardi
  * See LICENSE for details
  */
+#include <assert.h>
 #include <stdlib.h>
-
 #include <grapheme.h>
-
 #include <infra/string.h>
 
 static void maybe_grow(InfraString *string, size_t need);
 
-static const uint16_t k_infra__string_grow_step;
+static const uint16_t k_infra__string_grow_step = 4;
 
 InfraString *
 infra_string_create(void)
@@ -41,7 +40,12 @@ maybe_grow(InfraString *string, size_t need)
   size_t new_size = string->size + need;
 
   if (new_size >= string->capacity) {
-    size_t new_capacity = string->capacity + k_infra__string_grow_step;
+    size_t new_capacity;
+
+    for (new_capacity = string->capacity;
+         new_size >= new_capacity;
+         new_capacity += k_infra__string_grow_step) ;
+
     char *new_data = calloc(new_capacity, 1);
 
     memcpy(new_data, string->data, string->size);
@@ -71,6 +75,28 @@ infra_string_put_unicode(InfraString *string, uint32_t c)
 
   memcpy(&string->data[string->size], utf8, written);
   string->size += written;
+}
+
+void
+infra_string_put_chunk(InfraString *string, const char *chunk,
+                       size_t chunk_len)
+{
+  assert(chunk != NULL);
+
+  maybe_grow(string, chunk_len);
+  memcpy(&string->data[string->size], chunk, chunk_len);
+  string->size += chunk_len;
+}
+
+InfraString *
+infra_string_from_cstring(const char *cstring)
+{
+  InfraString *string = infra_string_create();
+  size_t slen = strlen(cstring);
+
+  infra_string_put_chunk(string, cstring, slen);
+
+  return string;
 }
 
 InfraString *

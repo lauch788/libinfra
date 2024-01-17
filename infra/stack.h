@@ -39,4 +39,17 @@ infra_stack_pop(InfraStack *stack)
 #define INFRA_STACK_REVERSE_FOREACH(stack, index) \
   for (int index = (stack)->size - 1; index >= 0; index--)
 
+static inline int
+infra_stack_index(const InfraStack *stack, const void *item)
+{
+  INFRA_STACK_FOREACH(stack, i)
+    if (stack->items[i] == item)
+      return i;
+
+  return -1;
+}
+
+void infra_stack_insert(InfraStack *stack, int idx, void *item);
+
 #endif /* _LIBINFRA_STACK_H */
+
