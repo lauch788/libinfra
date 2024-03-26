@@ -31,6 +31,15 @@ infra_string_unref(InfraString *string)
 }
 
 static inline void
+infra_string_clearref(InfraString * volatile *pstring)
+{
+  if (pstring != NULL) {
+    infra_string_unref(*pstring);
+    *pstring = NULL;
+  }
+}
+
+static inline void
 infra_string_zero(InfraString *string)
 {
   if (string != NULL)

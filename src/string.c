@@ -47,10 +47,9 @@ maybe_grow(InfraString *string, size_t need)
          new_capacity += k_infra__string_grow_step) ;
 
     char *new_data = calloc(new_capacity, 1);
-
     memcpy(new_data, string->data, string->size);
-    free(string->data);
 
+    free(string->data);
     string->data = new_data;
     string->capacity = new_capacity;
   }
@@ -67,18 +66,17 @@ infra_string_put_char(InfraString *string, char c)
 void
 infra_string_put_unicode(InfraString *string, uint32_t c)
 {
-  char utf8[10] = { 0 };
+  char utf8[16] = { 0 };
   size_t written;
 
   written = grapheme_encode_utf8(c, utf8, sizeof (utf8));
-  maybe_grow(string, written);
 
-  memcpy(&string->data[string->size], utf8, written);
-  string->size += written;
+  infra_string_put_chunk(string, utf8, written);
 }
 
 void
-infra_string_put_chunk(InfraString *string, const char *chunk,
+infra_string_put_chunk(InfraString *string,
+                       char const *chunk,
                        size_t chunk_len)
 {
   assert(chunk != NULL);
@@ -89,7 +87,7 @@ infra_string_put_chunk(InfraString *string, const char *chunk,
 }
 
 InfraString *
-infra_string_from_cstring(const char *cstring)
+infra_string_from_cstring(char const *cstring)
 {
   InfraString *string = infra_string_create();
   size_t slen = strlen(cstring);
@@ -100,7 +98,7 @@ infra_string_from_cstring(const char *cstring)
 }
 
 InfraString *
-infra_string_clone(const InfraString *src)
+infra_string_clone(InfraString const *src)
 {
   InfraString *clone;
 

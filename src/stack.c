@@ -19,7 +19,7 @@ infra_stack_create(void)
 
   stack = calloc(sizeof (*stack), 1);
 
-  uint32_t init_capacity = k_infra__stack_grow_step;
+  int32_t init_capacity = k_infra__stack_grow_step;
   stack->capacity = init_capacity;
 
   void **items = calloc(init_capacity, sizeof (void *));
@@ -38,10 +38,10 @@ infra_stack_free(InfraStack *stack)
 static void
 maybe_grow(InfraStack *stack, size_t need)
 {
-  uint32_t new_size = stack->size + need;
+  int32_t new_size = stack->size + need;
 
   if (new_size > stack->capacity) {
-    uint32_t new_capacity = stack->capacity + k_infra__stack_grow_step;
+    int32_t new_capacity = stack->capacity + k_infra__stack_grow_step;
     stack->capacity = new_capacity;
 
     void **new_items = calloc(new_capacity, sizeof (void *));

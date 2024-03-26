@@ -6,9 +6,11 @@
 
 typedef struct InfraStack_s {
   void **   items;
-  uint32_t  size;
-  uint32_t  capacity;
+  int32_t   size;
+  int32_t   capacity;
 } InfraStack;
+
+#define InfraStack(comptime_typename) InfraStack
 
 InfraStack *infra_stack_create(void);
 void infra_stack_free(InfraStack *stack);

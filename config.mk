@@ -4,16 +4,16 @@
 DESTDIR   =
 PREFIX    = /usr/local
 INCPREFIX = $(PREFIX)/include
-LIBPREFIX = $(PREFIX)/lib
+LIBPREFIX = $(PREFIX)/lib64
 PCPREFIX  = $(PREFIX)/lib64/pkgconfig
 
 # names
 ANAME = libinfra.a
 
 # flags
-CFLAGS = -std=c99 -Wall -pedantic -O2 -ggdb3
+CFLAGS = -std=c99 -pedantic -Wall -Wextra -O2 -ggdb3
 
 # tools
-CC     = cc
+CC     = clang
 AR     = ar
 RANLIB = ranlib
