@@ -32,7 +32,15 @@ infra_stack_pop(InfraStack *stack)
   if (stack->size == 0)
     return NULL;
 
-  return stack->items[--stack->size];
+  void *item = stack->items[stack->size - 1];
+
+  /*
+   * valgrind is just lining up for these steps
+   */
+  stack->items[stack->size - 1] = NULL;
+  stack->size -= 1;
+
+  return item;
 }
 
 #define INFRA_STACK_FOREACH(stack, index) \
@@ -50,6 +58,8 @@ infra_stack_index(const InfraStack *stack, const void *item)
 
   return -1;
 }
+
+void *infra_stack_remove(InfraStack *stack, void *item);
 
 void infra_stack_insert(InfraStack *stack, int idx, void *item);
 

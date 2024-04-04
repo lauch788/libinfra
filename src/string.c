@@ -9,8 +9,6 @@
 
 static void maybe_grow(InfraString *string, size_t need);
 
-static const uint16_t k_infra__string_grow_step = 4;
-
 InfraString *
 infra_string_create(void)
 {
@@ -18,7 +16,7 @@ infra_string_create(void)
 
   string = calloc(sizeof (*string), 1);
 
-  uint16_t init_capacity = k_infra__string_grow_step;
+  size_t init_capacity = 8;
   char *data = calloc(init_capacity, 1);
 
   string->data = data;
@@ -28,7 +26,7 @@ infra_string_create(void)
 }
 
 void
-infra__string_free(InfraString *string)
+infra_string_free_(InfraString *string)
 {
   free(string->data);
   free(string);
@@ -44,7 +42,7 @@ maybe_grow(InfraString *string, size_t need)
 
     for (new_capacity = string->capacity;
          new_size >= new_capacity;
-         new_capacity += k_infra__string_grow_step) ;
+         new_capacity <<= 1) ;
 
     char *new_data = calloc(new_capacity, 1);
     memcpy(new_data, string->data, string->size);
@@ -111,3 +109,4 @@ infra_string_clone(InfraString const *src)
 
   return infra_string_ref(clone);
 }
+

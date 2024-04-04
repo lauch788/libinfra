@@ -5,14 +5,14 @@
 #include <string.h>
 
 typedef struct InfraString_s {
-  char *    data;
-  int32_t   refcnt;
-  uint16_t  size;
-  uint16_t  capacity;
+  char *        data;
+  int_fast32_t  refcnt;
+  size_t        size;
+  size_t        capacity;
 } InfraString;
 
 InfraString *infra_string_create(void);
-void infra__string_free(InfraString *string);
+void infra_string_free_(InfraString *string);
 
 static inline InfraString *
 infra_string_ref(InfraString *string)
@@ -27,7 +27,7 @@ static inline void
 infra_string_unref(InfraString *string)
 {
   if (string != NULL && --string->refcnt <= 0)
-    infra__string_free(string);
+    infra_string_free_(string);
 }
 
 static inline void

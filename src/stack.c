@@ -10,8 +10,6 @@
 
 static void maybe_grow(InfraStack *stack, size_t need);
 
-static const uint32_t k_infra__stack_grow_step = 4;
-
 InfraStack *
 infra_stack_create(void)
 {
@@ -19,7 +17,7 @@ infra_stack_create(void)
 
   stack = calloc(sizeof (*stack), 1);
 
-  int32_t init_capacity = k_infra__stack_grow_step;
+  int32_t init_capacity = 16;
   stack->capacity = init_capacity;
 
   void **items = calloc(init_capacity, sizeof (void *));
@@ -41,7 +39,7 @@ maybe_grow(InfraStack *stack, size_t need)
   int32_t new_size = stack->size + need;
 
   if (new_size > stack->capacity) {
-    int32_t new_capacity = stack->capacity + k_infra__stack_grow_step;
+    int32_t new_capacity = stack->capacity * 2;
     stack->capacity = new_capacity;
 
     void **new_items = calloc(new_capacity, sizeof (void *));
@@ -61,6 +59,28 @@ infra_stack_push(InfraStack *stack, void *item)
   return item;
 }
 
+
+void *
+infra_stack_remove(InfraStack *stack, void *item)
+{
+  int idx = infra_stack_index(stack, item);
+
+  if (idx != -1) {
+    stack->items[idx] = NULL;
+
+    for (int i = idx; i < stack->size - 1; i++)
+      stack->items[i] = stack->items[i + 1];
+
+    stack->items[stack->size - 1] = NULL;
+    stack->size -= 1;
+
+    return item;
+  }
+
+  return NULL;
+}
+
+
 void
 infra_stack_insert(InfraStack *stack, int idx, void *item)
 {
@@ -71,3 +91,4 @@ infra_stack_insert(InfraStack *stack, int idx, void *item)
    (stack->size - idx) * sizeof (stack->items[0]));
   stack->items[idx] = item;
 }
+

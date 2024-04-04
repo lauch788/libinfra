@@ -11,9 +11,11 @@ PCPREFIX  = $(PREFIX)/lib64/pkgconfig
 ANAME = libinfra.a
 
 # flags
-CFLAGS = -std=c99 -pedantic -Wall -Wextra -O2 -ggdb3
+CFLAGS = -std=c99 -pedantic -Wall -Wextra -O2
+CFLAGS += -ggdb3
 
 # tools
 CC     = clang
 AR     = ar
 RANLIB = ranlib
+
