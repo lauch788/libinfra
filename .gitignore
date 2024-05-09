@@ -1,4 +1,5 @@
 *.o
 *.a
+*.gcno
 test/stack
 test/string

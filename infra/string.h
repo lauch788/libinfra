@@ -42,8 +42,10 @@ infra_string_clearref(InfraString * volatile *pstring)
 static inline void
 infra_string_zero(InfraString *string)
 {
-  if (string != NULL)
+  if (string != NULL) {
     memset(string->data, 0, string->capacity);
+    string->size = 0;
+  }
 }
 
 void infra_string_put_char(InfraString *string, char c);

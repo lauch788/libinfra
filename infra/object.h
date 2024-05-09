@@ -1,59 +1,69 @@
-#ifndef _LIBINFRA_OBJECT_H
-#define _LIBINFRA_OBJECT_H
+#ifndef _infra_object_h_
+#define _infra_object_h_
 
-#include <stdint.h>
 #include <stddef.h>
+#include <stdint.h>
 
-typedef void InfraObject;
-typedef struct InfraObjectShared_s InfraObjectShared;
 
-typedef struct InfraClass_s {
-  void (*finalizer) (InfraObjectShared *obj);
-} InfraClass;
+struct _infra_object_vtable {
+  /* optional; for derived classes */
+  struct _infra_object_vtable const *super_vtable;
 
-struct InfraObjectShared_s {
-  const InfraClass *class;
-  int_least32_t strong_refcnt;
-  int_least32_t weak_refcnt;
-  /* opaque */
+  /*
+   * optional; Constructors/destructors.
+   * Called in C++ order, MUST NOT be called explicitly
+   */
+  void (*ctor) (void *p);
+  void (*dtor) (void *p);
+
+  /*
+   * optional; size of instance
+   *  zero -> abstract class, instantiation throws runtime error
+   */
+  size_t impl_size;
 };
 
-void infra__object_free(InfraObject *any);
 
-static inline InfraObject *
-infra_strong_ref_object(InfraObject *any)
+#define INFRA_OBJECT_DECLARE_VTABLE(comptime_name) \
+  extern const struct _infra_object_vtable k_ ## comptime_name ## _vtable_
+
+#define INFRA_OBJECT_DEFINE_VTABLE(comptime_name) \
+  const struct _infra_object_vtable k_ ## comptime_name ## _vtable_ =
+
+#define INFRA_OBJECT_VTABLE(comptime_name) \
+  (&k_ ## comptime_name ## _vtable_)
+
+
+struct _infra_object_header {
+  struct _infra_object_vtable const *vtable;
+  intmax_t ref_count;
+};
+
+
+static inline void *
+infra_object_ref(void *p)
 {
-  if (any != NULL)
-    ((InfraObjectShared *) any)->strong_refcnt++;
+  if (p == NULL)
+    return NULL;
 
-  return any;
+  struct _infra_object_header *header = header;
+
+  header->ref_count += 1;
+
+  return p;
 }
+
+void infra_object_unref(void *p);
 
 static inline void
-infra_strong_unref_object(InfraObject *any)
+infra_clear_pointer_(struct _infra_object_header * volatile *ref)
 {
-  InfraObjectShared *shared = any;
+  if (ref == NULL)
+    return;
 
-  if (shared != NULL && --shared->strong_refcnt <= 0)
-    infra__object_free(shared);
+  infra_object_unref(*ref);
+  *ref = NULL;
 }
 
-static inline InfraObject *
-infra_weak_ref_object(InfraObject *any)
-{
-  if (any != NULL)
-    ((InfraObjectShared *) any)->weak_refcnt++;
+#endif /* _infra_object_h_ */
 
-  return any;
-}
-
-static inline void
-infra_weak_unref_object(InfraObject *any)
-{
-  InfraObjectShared *shared = any;
-
-  if (shared != NULL)
-    shared->weak_refcnt--;
-}
-
-#endif /* _LIBINFRA_OBJECT_H */

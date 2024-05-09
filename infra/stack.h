@@ -18,7 +18,7 @@ void infra_stack_free(InfraStack *stack);
 static inline void *
 infra_stack_peek(InfraStack *stack)
 {
-  if (stack->size == 0)
+  if (stack == NULL || stack->size == 0)
     return NULL;
 
   return stack->items[stack->size - 1];
@@ -29,7 +29,7 @@ void *infra_stack_push(InfraStack *stack, void *item);
 static inline void *
 infra_stack_pop(InfraStack *stack)
 {
-  if (stack->size == 0)
+  if (stack == NULL || stack->size == 0)
     return NULL;
 
   void *item = stack->items[stack->size - 1];

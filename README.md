@@ -13,7 +13,7 @@ Features
 
 Dependencies
 ------------
-- C99 compiler
+- C11 compiler
 - libgrapheme
 
 Build
@@ -23,3 +23,4 @@ Build
 Linker Flags
 ------------
 ```-linfra -lgrapheme```
+Alternatively, use `pkg-config --libs libinfra`
