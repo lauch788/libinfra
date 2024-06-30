@@ -1,6 +1,6 @@
 # Customize below to fit your system
 
-# paths (unset $PCPREFIX to not install a pkg-config-file)
+# paths (unset $PCPREFIX to not install a pkg-config file)
 DESTDIR   =
 PREFIX    = /usr/local
 INCPREFIX = $(PREFIX)/include
@@ -12,7 +12,7 @@ ANAME = libinfra.a
 
 # flags
 CFLAGS =
-CFLAGS += -std=c11
+CFLAGS += -std=c99
 CFLAGS += -pedantic -Wall -Wextra -O2
 CFLAGS += -ggdb3
 # CFLAGS += --coverage

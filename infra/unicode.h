@@ -1,6 +1,16 @@
 #ifndef _infra_unicode_h_
 #define _infra_unicode_h_
 
+/*
+ * Copyright 2024 (c) Adrien Ricciardi
+ * This file is part of the libinfra distribution (https://github.com/rshadr/libinfra)
+ * See LICENSE for details
+ */
+
+#ifdef __cplusplus
+extern "C" {
+#endif /* __cplusplus */
+
 #include <stdbool.h>
 #include <uchar.h>
 
@@ -19,8 +29,8 @@ infra_unicode_is_trailing_surrogate(char32_t c)
 static inline bool
 infra_unicode_is_surrogate(char32_t c)
 {
-  return (unicode_is_leading_surrogate(c)
-       || unicode_is_trailing_surrogate(c));
+  return (infra_unicode_is_leading_surrogate(c)
+       || infra_unicode_is_trailing_surrogate(c));
 }
 
 static inline bool
@@ -56,12 +66,19 @@ infra_unicode_is_noncharacter(char32_t c)
 
 }
 
+
 #if defined(INFRA_SHORT_NAMES)
 # define unicode_is_leading_surrogate(...) infra_unicode_is_leading_surrogate(__VA_ARGS__)
 # define unicode_is_trailing_surrogate(...) infra_unicode_is_trailing_surrogate(__VA_ARGS__)
 # define unicode_is_surrogate(...) infra_unicode_is_surrogate(__VA_ARGS__)
 # define unicode_is_noncharacter(...) infra_unicode_is_noncharacter(__VA_ARGS__)
 #endif /* defined(INFRA_SHORT_NAMES) */
+
+
+#ifdef __cplusplus
+} /* extern "C" */
+#endif /* __cplusplus */
+
 
 #endif /* !defined(_infra_unicode_h_) */
 

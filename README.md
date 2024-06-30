@@ -6,14 +6,15 @@ More features will be implemented as the need arises within dependent code.
 
 Features
 --------
-- Generic object interface
-- Garbage-collected UTF-8 strings
 - Stack data structure
+- Queue data structure
+- Garbage-collected UTF-8 strings
 - Locale-independent ASCII functions
+- Locale-independent Unicode functions
 
 Dependencies
 ------------
-- C11 compiler
+- C99 compiler
 - libgrapheme
 
 Build
@@ -22,5 +23,7 @@ Build
 
 Linker Flags
 ------------
+``pkg-config --libs libinfra``
+
 ```-linfra -lgrapheme```
-Alternatively, use `pkg-config --libs libinfra`
+

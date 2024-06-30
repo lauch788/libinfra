@@ -8,12 +8,12 @@ CFLAGS += -I.
 all: $(ANAME)
 
 TEST =\
+	test/queue\
 	test/stack\
 	test/string\
 
 SRCS =\
 	src/queue\
-	src/object\
 	src/stack\
 	src/string\
 
@@ -32,11 +32,12 @@ $(SRCS:=.o):
 $(SRCS:=.o): config.mk Makefile
 
 test: $(TEST)
-	for t in $(TEST); do echo -n "Running $$t: "; ./$$t && echo 'passed' || echo 'failed'; done
+	@for t in $(TEST); do echo -n "Running $$t:\t"; ./$$t && echo 'passed' || echo 'failed'; done
 
 $(TEST): $(ANAME)
 	$(CC) -o $@ $(CFLAGS) $(@:=.c) -L. -linfra -lgrapheme
 
+test/queue: test/queue.c infra/queue.h
 test/stack: test/stack.c infra/stack.h
 test/string: test/string.c infra/string.h
 
@@ -52,6 +53,7 @@ uninstall:
 	rm -rdf "$(DESTDIR)$(INCPREFIX)/infra"
 
 clean:
-	rm -rf $(ANAME) $(SRCS:=.o) $(SRCS:=.gcno) $(SRCS:=.gcda) $(TEST)
+	rm -rf $(ANAME) $(SRCS:=.o) $(TEST)
 
 .PHONY: all test install uninstall clean
+

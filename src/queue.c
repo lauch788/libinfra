@@ -1,25 +1,34 @@
+/*
+ * Copyright 2024 (c) Adrien Ricciardi
+ * This file is part of the libinfra distribution (https://github.com/rshadr/libinfra)
+ * See LICENSE for details
+ */
+
 #include <infra/queue.h>
 
 #include <stdlib.h>
 #include <string.h>
 
+
 static void infra__queue_double_capacity(InfraQueue *q);
 
 static const int k_infra__queue_start_capacity = 4;
 
+
 InfraQueue *
 infra_queue_create(void)
 {
-  InfraQueue *q = calloc(1, sizeof (*q));
+  InfraQueue *q = (InfraQueue *)calloc(1, sizeof (*q));
 
   q->capacity = k_infra__queue_start_capacity;
-  q->items = calloc(q->capacity, sizeof (q->items[0]));
+  q->items = (void **)calloc(q->capacity, sizeof (q->items[0]));
 
   q->length = 0;
   q->rear = -1;
 
   return q;
 }
+
 
 void
 infra_queue_free(InfraQueue *queue)
@@ -28,11 +37,13 @@ infra_queue_free(InfraQueue *queue)
   free(queue);
 }
 
+
 static void
-infra__queue_double_capacity(InfraQueue *q)
+infra__queue_double_capacity(InfraQueue *queue)
 {
+  InfraQueue *q = queue;
   int new_capacity = q->capacity * 2;
-  void **new_items = calloc(new_capacity, sizeof (q->items[0]));
+  void **new_items = (void **)calloc(new_capacity, sizeof (q->items[0]));
 
   if (q->length > 0 && q->front >= q->rear)
   {
@@ -58,9 +69,12 @@ infra__queue_double_capacity(InfraQueue *q)
   q->items = new_items;
 }
 
+
 void *
-infra_queue_enqueue(InfraQueue *q, void *item)
+infra_queue_enqueue(InfraQueue *queue, void *item)
 {
+  InfraQueue *q = queue;
+
   if (q->length == q->capacity)
     infra__queue_double_capacity(q);
 
@@ -72,9 +86,12 @@ infra_queue_enqueue(InfraQueue *q, void *item)
   return item;
 }
 
+
 void *
-infra_queue_dequeue(InfraQueue *q)
+infra_queue_dequeue(InfraQueue *queue)
 {
+  InfraQueue *q = queue;
+
   if (q->length == 0)
     return NULL;
 
@@ -85,3 +102,4 @@ infra_queue_dequeue(InfraQueue *q)
 
   return item;
 }
+

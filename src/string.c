@@ -1,23 +1,27 @@
 /*
- * Copyright 2024 Adrien Ricciardi
+ * Copyright 2024 (c) Adrien Ricciardi
+ * This file is part of the libinfra distribution (https://github.com/rshadr/libinfra)
  * See LICENSE for details
  */
+
 #include <assert.h>
 #include <stdlib.h>
 #include <grapheme.h>
 #include <infra/string.h>
 
+
 static void maybe_grow(InfraString *string, size_t need);
+
 
 InfraString *
 infra_string_create(void)
 {
   InfraString *string;
 
-  string = calloc(sizeof (*string), 1);
+  string = (InfraString *)calloc(sizeof (*string), 1);
 
   size_t init_capacity = 8;
-  char *data = calloc(init_capacity, 1);
+  char *data = (char *)calloc(init_capacity, 1);
 
   string->data = data;
   string->capacity = init_capacity;
@@ -25,12 +29,14 @@ infra_string_create(void)
   return infra_string_ref(string);
 }
 
+
 void
 infra_string_free_(InfraString *string)
 {
   free(string->data);
   free(string);
 }
+
 
 static void
 maybe_grow(InfraString *string, size_t need)
@@ -44,7 +50,7 @@ maybe_grow(InfraString *string, size_t need)
          new_size >= new_capacity;
          new_capacity <<= 1) ;
 
-    char *new_data = calloc(new_capacity, 1);
+    char *new_data = (char *)calloc(new_capacity, 1);
     memcpy(new_data, string->data, string->size);
 
     free(string->data);
@@ -54,12 +60,14 @@ maybe_grow(InfraString *string, size_t need)
 
 }
 
+
 void
 infra_string_put_char(InfraString *string, char c)
 {
   maybe_grow(string, 1);
   string->data[string->size++] = c;
 }
+
 
 void
 infra_string_put_unicode(InfraString *string, uint32_t c)
@@ -71,6 +79,7 @@ infra_string_put_unicode(InfraString *string, uint32_t c)
 
   infra_string_put_chunk(string, utf8, written);
 }
+
 
 void
 infra_string_put_chunk(InfraString *string,
@@ -84,6 +93,7 @@ infra_string_put_chunk(InfraString *string,
   string->size += chunk_len;
 }
 
+
 InfraString *
 infra_string_from_cstring(char const *cstring)
 {
@@ -95,16 +105,17 @@ infra_string_from_cstring(char const *cstring)
   return string;
 }
 
+
 InfraString *
 infra_string_clone(InfraString const *src)
 {
   InfraString *clone;
 
-  clone = calloc(sizeof (*clone), 1);
+  clone = (InfraString *)calloc(sizeof (*clone), 1);
 
   clone->capacity = src->capacity;
   clone->size = src->size;
-  clone->data = calloc(src->capacity, 1);
+  clone->data = (char *) calloc(src->capacity, 1);
   memcpy(&clone->data[0], &src->data[0], src->size);
 
   return infra_string_ref(clone);
